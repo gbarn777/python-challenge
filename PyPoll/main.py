@@ -1,77 +1,61 @@
 import os
 import csv
 
-#Create path
-election_csv = os.path.join("Resources", "election_data.csv")
-analysis_txt = os.path.join("analysis", "election_analysis.txt")
+pollData = os.path.join(".","Resources","election_data.csv")
+#currentDirectory = os.getcwd()
+#print(currentDirectory)
+#print(pollData)
 
-#Analysis
-print(f"Election Results\n"
-  f"----------------------------")
+# Open the CSV file
+with open(pollData, newline="", encoding="utf-8") as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=",")
 
-#Set variables
-total_votes = 0
-candidate_list = []
-unique_candidates = []
-candidate_name = []
-candidate_votes = {}
-percentage_votes = 0
-#candidate_votes = []
-winning_candidate = ""
-winner = 0
+  # The total number of votes cast (row count after the header)
+    next(csvreader)
+    data = list(csvreader)
+    row_count = len(data)
 
-#Read file
-with open(election_csv) as csvfile: 
-    csv_reader = csv.reader(csvfile)
+  # Create new list from CSV column "C" to get a complete list of candidates who received votes
+    candilist = list()
+    tally = list()
+    for i in range (0,row_count):
+        candidate = data[i][2]
+        tally.append(candidate)
+        if candidate not in candilist: 
+            candilist.append(candidate)
+    candicount = len(candilist)
 
-    #Skip headers
-    header = next(csv_reader)
+  # The total number of votes each candidate won & the percentage of votes each candidate won
+    votes = list()
+    percentage = list()
+    for j in range (0,candicount):
+        name = candilist[j]
+        votes.append(tally.count(name))
+        vprct = votes[j]/row_count
+        percentage.append(vprct)
 
-    for row in csv_reader:
+  # The winner of the election based on popular vote.
+    winner = votes.index(max(votes))    
 
-#Count total votes
-       total_votes = total_votes + 1
-print(f'Total Votes: (len(total_votes))')
+# In addition, your final script should both print the analysis to the terminal and export a text file with the results.
+  # Print the results to terminal
+    print("Election Results")
+    print("----------------------------")
+    print(f"Total Votes: {row_count:,}")
+    print("----------------------------")
+    for k in range (0,candicount): 
+        print(f"{candilist[k]}: {percentage[k]:.3%} ({votes[k]:,})")
+    print("----------------------------")
+    print(f"Winner: {candilist[winner]}")
+    print("----------------------------")
 
-#Separate
-print(f"----------------------------")
-
-#List candidates
-with open(election_csv) as csvfile:
-    csv_reader = csv.reader(csvfile)
-
-    #Skip headers
-    header = next(csv_reader)
-
-    for row in csv_reader:
-        candidate_name = row[2]
-        if candidate_name not in candidate_list:
-            candidate_list.append(candidate_name)
-            candidate_votes[candidate_name] = 0
-            #candidate_list.append(row[2])
-        candidate_votes[candidate_name] = candidate_votes[candidate_name] 
-        for i in set(candidate_list):
-            unique_candidates.append(i)
-
- #Total votes per candidate
-        y = candidate_list.count(i)
-        candidate_votes.update({candidate_name: candidate_votes})
-        #print(candidate_name)
-    print(candidate_votes)
-
-#Separate
-print(f"----------------------------")
-
-#Sort list
-sorted_list = sorted(candidate_votes)
-arrange_list = sorted_list
-
-count_candidate = candidate_votes(arrange_list)
-candidate_votes.append(count_candidate.most_common())
-
-for item in candidate_votes:
-       
-        first = format((item[0][1])*100/(sum(count_candidate.values())),'.3f')
-        second = format((item[1][1])*100/(sum(count_candidate.values())),'.3f')
-        third = format((item[2][1])*100/(sum(count_candidate.values())),'.3f')
-        fourth = format((item[3][1])*100/(sum(count_candidate.values())),'.3f')
+  # Print the results to "PyPoll.txt" file
+    print("Election Results", file=open("PyPoll.txt", "a"))
+    print("----------------------------", file=open("PyPoll.txt", "a"))
+    print(f"Total Votes: {row_count:,}", file=open("PyPoll.txt", "a"))
+    print("----------------------------", file=open("PyPoll.txt", "a"))
+    for k in range (0,candicount): 
+        print(f"{candilist[k]}: {percentage[k]:.3%} ({votes[k]:,})", file=open("PyPoll.txt", "a"))
+    print("----------------------------", file=open("PyPoll.txt", "a"))
+    print(f"Winner: {candilist[winner]}", file=open("PyPoll.txt", "a"))
+    print("----------------------------", file=open("PyPoll.txt", "a"))
