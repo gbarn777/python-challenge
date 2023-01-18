@@ -48,18 +48,22 @@ with open(election_csv) as csvfile:
             candidate_votes[candidate_name] = 0
             #candidate_list.append(row[2])
         candidate_votes[candidate_name] = candidate_votes[candidate_name] + 1
-        #for i in set(candidate_list):
-            
-            #unique_candidates.append(i)
-            
-        # Total votes per candidate
-            #y = candidate_list.count(i)
-            #candidate_votes.append(y)
+        for i in set(candidate_list):
+            unique_candidates.append(i)
+
+ #Total votes per candidate
+        y = candidate_list.count(i)
+        candidate_votes.update(range(y))
         #print(candidate_name)
     print(candidate_votes)
 
 #Separate
 print(f"----------------------------")
 
-# Sort list
+#Sort list
 sorted_list = sorted(candidate_votes)
+
+# Percentage of votes per candidate
+
+z = (y/candidate_votes)*100
+percentage_votes.append(z)
